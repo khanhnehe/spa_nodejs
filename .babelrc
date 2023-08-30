@@ -1,0 +1,6 @@
+{
+    "presets": [
+        "@babel/preset-env"
+    ]
+}
+//ko cần quá chú ý cái này chỉ là giúp cho thư viện hoạt động thui
