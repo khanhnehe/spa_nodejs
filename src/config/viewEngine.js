@@ -1,6 +1,6 @@
 import express from "express";
 
-let configViewEngine = () => {
+let configViewEngine = (app) => {
   app.use(express.static("./src/public"));
   // như này nodejs mới hiểu đc rằng we dùng cái view engine có tên là ejs
   //ejs là cái thư viện mà ta đã cài đặt r

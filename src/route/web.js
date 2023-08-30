@@ -10,7 +10,7 @@ let initWebRouters = (app) => {
   router.get("/", (req, res) => {
     return res.send("Hello word with khanh dep");
   });
-  return app.user("/", router);
+  return app.use("/", router);
 };
 
 // để sd cái hàm này bên ngoài web.js cần làm như dưới:
