@@ -39,7 +39,25 @@ let hashUserPassword = (password) => {
   });
 };
 
+//lấy all user ko cần có input đầu vào
+let getAllUser = () => {
+  //tránh bất đồng bộ xảy ra ta dùng Promise để js chờ
+  //dung async await báo cho js bt đây là 1 hàm bất đồng bộ
+  return new Promise(async (resolve, reject) => {
+    try {
+      let users = await db.User.findAll({
+        //raw: true in ra dữ liệu gốc
+        raw: true,
+      });
+      resolve(users);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
 module.exports = {
   createNewUser: createNewUser,
   hashUserPassword: hashUserPassword,
+  getAllUser: getAllUser,
 };

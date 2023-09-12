@@ -1,0 +1,68 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>get CRUD</title>
+    <style>
+        table {
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        td,
+        th {
+            border: 1px solid #afadad;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #c5edac;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+</head>
+
+<body>
+    <table style="width: 100%;">
+        <!-- tr table row -->
+        <tr>
+            <!-- th table head -->
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Email</th>
+            <th>Phone number</th>
+            <th>Address</th>
+        </tr>
+        <!-- td table data -->
+        <% for(let i=0; i<dataTable.length; i++){ %>
+            <tr>
+
+                <td>
+                    <!-- dùng dấu "=" ở đây để nó bt ta muốn in ra 1 dữ liệu j đây -->
+                    <%= dataTable[i].firstName %>
+                </td>
+                <td>
+                    <%= dataTable[i].lastName %>
+                </td>
+                <td>
+                    <%= dataTable[i].email %>
+                </td>
+                <td>
+                    <%= dataTable[i].phonemumber %>
+                </td>
+                <td>
+                    <%= dataTable[i].address %>
+                </td>
+
+            </tr>
+            <% } %>
+    </table>
+</body>
+
+</html>
