@@ -22,8 +22,23 @@
             background-color: #c5edac;
         }
 
-        tr:nth-child(even) {
-            background-color: #dddddd;
+
+        td.edit-button {
+            border: 1px solid #ffffff;
+            text-align: left;
+            padding: 8px;
+        }
+
+        button.btn-edit {
+            background-color: #b8fffa;
+            border-radius: 3px;
+            border-color: #a1e9ff;
+        }
+
+        button.btn-delete {
+            background-color: #ffacd6;
+            border-color: #ffc0df;
+            border-radius: 3px;
         }
     </style>
 </head>
@@ -60,8 +75,18 @@
                     <%= dataTable[i].address %>
                 </td>
 
+                <td class="edit-button">
+                    <!-- dùng thẻ a hỗ trọ chúng ta cái thuộc tính href -->
+                    <button class="btn-edit"> <a href="/edit-crud?id=<%= dataTable[i].id %>"
+                            type="button">Edit</a></button>
+                    <button class="btn-delete"> <a type="button">Delete</a></button>
+                </td>
+
             </tr>
             <% } %>
+    </table>
+    <table>
+
     </table>
 </body>
 

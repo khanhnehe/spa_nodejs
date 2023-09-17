@@ -12,6 +12,9 @@ let initWebRouters = (app) => {
   router.post("/post-crud", homeController.postCRUD);
   router.get("/get-crud", homeController.displayGetCRUD);
 
+  router.get("/edit-crud", homeController.getEditCRUD);
+  router.post("/post-edit-crud", homeController.postEditCRUD);
+
   return app.use("/", router);
 };
 module.exports = initWebRouters;

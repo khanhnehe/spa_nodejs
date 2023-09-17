@@ -56,8 +56,65 @@ let getAllUser = () => {
   });
 };
 
+let getUserIntoId = (userId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let user = await db.User.findOne({
+        //dùng đk where, ở đây id sẽ bằng userId mà ta truyền vào
+        where: { id: userId },
+        raw: true,
+      });
+
+      //nếu ta tìm thấy ngdung thì trả ra thằng ngdung lun
+      if (user) {
+        resolve(user);
+
+        //trả về 1 [] thui
+      } else {
+        resolve({});
+      }
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
+
+let updateUserData = (data) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let user = await db.User.findOne({
+        //đk where 1 cái object{ id chính = data.id} tức kà ta tìm đc thằng user
+        //vs đk cái id chính = cái id mà we truyền vào
+        where: { id: data.id },
+      });
+      //sau khi ìm xong ta dùng 1 vòng if ở đây
+      //nếu we có user thì we sẽ update user và chấm cái trường tương ứng
+      if (user) {
+        user.firstName = data.firstName;
+        user.lastName = data.lastName;
+        user.address = data.address;
+        user.phonemumber = data.phonemumber;
+
+        //sau cùng ta cần lưu nó lại
+        await user.save();
+
+        //render ra user sau khi update tức lấy all ngdung
+        let allUser = await db.User.findAll();
+
+        //để thoát ra khỏi Promise này ta   resolve(allUser);
+        resolve(allUser);
+      } else {
+        resolve();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  });
+};
 module.exports = {
   createNewUser: createNewUser,
   hashUserPassword: hashUserPassword,
   getAllUser: getAllUser,
+  getUserIntoId: getUserIntoId,
+  updateUserData: updateUserData,
 };

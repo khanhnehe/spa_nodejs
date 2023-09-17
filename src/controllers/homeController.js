@@ -37,10 +37,35 @@ let displayGetCRUD = async (req, res) => {
   console.log("...................");
 
   return res.render("displayCRUD.ejs", {
-    //Truyền data sang file view tương tự như ta import 1 function,
-    //khi muốn truyền 1 biến qua view thì we sẽ dùng 1 cái biến là object
-    //và đặt ten cho nó
-    dataTable: data, // biến dataTable sẽ có giá trị = biến data phía trên ta truyền xuống
+    dataTable: data,
+  });
+};
+
+let getEditCRUD = async (req, res) => {
+  let userId = req.query.id;
+  if (userId) {
+    let userData = await CRUDService.getUserIntoId(userId);
+    //check userData not found
+
+    return res.render("edit_crud.ejs", {
+      //biến user sẽ được hiểu bên file view, ở đây user đặt tên là abc j cx đc
+      //giá trị của biến userData đã đc gán cho cái use này rồi
+      user: userData,
+    });
+  } else {
+    return res.send("ko tìm thấy user");
+  }
+};
+
+let postEditCRUD = async (req, res) => {
+  //hàm req.body giúp we có thể lấy đc tất cả các input đã đặt cái name
+  //ta đặt name là gì thì req.body chấm name đó thì sẽ ra đc số liệu đó
+  let data = req.body;
+  let allUser = await CRUDService.updateUserData(data); //muốn hàm này trả ra 1 user cho mk
+  //return giống thằng displayGetCRUD vì ta cần về trang tt của user
+
+  return res.render("displayCRUD.ejs", {
+    dataTable: allUser,
   });
 };
 
@@ -50,4 +75,6 @@ module.exports = {
   getCRUD: getCRUD,
   postCRUD: postCRUD,
   displayGetCRUD: displayGetCRUD,
+  getEditCRUD: getEditCRUD,
+  postEditCRUD: postEditCRUD,
 };
