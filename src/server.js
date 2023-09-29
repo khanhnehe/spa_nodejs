@@ -3,11 +3,19 @@ import bodyParser from "body-parser"; // thư viện hổ trọ cho we ta có th
 import viewEngine from "./config/viewEngine";
 import initWebRouters from "./route/web";
 import connectDB from "./config/connectDB";
+import cors from "cors";
 
 require("dotenv").config(); // cái này giúp we chạy dòng này process.env.PORT
 
 let app = express();
+// app.use(cors({ origin: true }));
 
+app.use(
+  cors({
+    origin: "http://localhost:3000", // Update this to your frontend's URL
+    credentials: true, // Allow credentials (e.g., cookies, HTTP authentication)
+  })
+);
 //config app
 //trước khi config app sẽ cấu hình các tham số mà phía client gửi lên
 
