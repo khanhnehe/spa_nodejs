@@ -111,10 +111,28 @@ let updateUserData = (data) => {
     }
   });
 };
+
+let deleteUserById = (userId) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let user = await db.User.findOne({
+        //vs đk where id chính bằng cái userId tức là trên input của we
+        where: { id: userId },
+      });
+      if (user) {
+        await user.destroy(); //đây là keyword của nó
+      }
+      resolve(user);
+    } catch (e) {
+      reject(e);
+    }
+  });
+};
 module.exports = {
   createNewUser: createNewUser,
   hashUserPassword: hashUserPassword,
   getAllUser: getAllUser,
   getUserIntoId: getUserIntoId,
   updateUserData: updateUserData,
+  deleteUserById: deleteUserById,
 };

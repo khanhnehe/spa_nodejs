@@ -31,10 +31,6 @@ let postCRUD = async (req, res) => {
 };
 let displayGetCRUD = async (req, res) => {
   let data = await CRUDService.getAllUser();
-  console.log("...................");
-  console.log(data);
-
-  console.log("...................");
 
   return res.render("displayCRUD.ejs", {
     dataTable: data,
@@ -68,6 +64,17 @@ let postEditCRUD = async (req, res) => {
     dataTable: allUser,
   });
 };
+let deleteUserById = async (req, res) => {
+  //trước tiên để xóa ta cần lấy ra thằng id
+  //dựa vào thằng id để biết xóa user nào
+  let userId = req.query.id;
+  if (userId) {
+    await CRUDService.deleteUserById(userId);
+    return res.send("Successful deletion!");
+  } else {
+    return res.send("User not found!");
+  }
+};
 
 module.exports = {
   getHomePage: getHomePage,
@@ -77,4 +84,5 @@ module.exports = {
   displayGetCRUD: displayGetCRUD,
   getEditCRUD: getEditCRUD,
   postEditCRUD: postEditCRUD,
+  deleteUserById: deleteUserById,
 };

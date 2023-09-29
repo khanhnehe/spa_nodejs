@@ -29,16 +29,22 @@
             padding: 8px;
         }
 
-        button.btn-edit {
+        a.btn-edit {
+            padding: 3px;
             background-color: #b8fffa;
             border-radius: 3px;
-            border-color: #a1e9ff;
+            border: 1px solid #408ca3;
+            text-decoration: none;
+
         }
 
-        button.btn-delete {
+        a.btn-delete {
+            padding: 3px;
             background-color: #ffacd6;
-            border-color: #ffc0df;
+            border: 1px solid #c6377e;
             border-radius: 3px;
+            text-decoration: none;
+
         }
     </style>
 </head>
@@ -77,9 +83,9 @@
 
                 <td class="edit-button">
                     <!-- dùng thẻ a hỗ trọ chúng ta cái thuộc tính href -->
-                    <button class="btn-edit"> <a href="/edit-crud?id=<%= dataTable[i].id %>"
-                            type="button">Edit</a></button>
-                    <button class="btn-delete"> <a type="button">Delete</a></button>
+                    <a class="btn-edit" href="/edit-crud?id=<%= dataTable[i].id %>" type="button">Edit</a></button>
+                    <a class="btn-delete" href="/delete-crud?id=<%= dataTable[i].id %>"
+                        type="button">Delete</a></button>
                 </td>
 
             </tr>
