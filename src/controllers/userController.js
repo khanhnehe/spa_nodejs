@@ -27,9 +27,34 @@ let handleLogin = async (req, res) => {
         user: userData.user ? userData.user : {}
     })
 
+}
 
+let handleGetAllUsers = async (req, res) => {
+    //id ở đây sẽ là id or ALL -> có 2 kiểu này tức là ta sẽ viết 2 api trong 1 lun
+    //nếu api là lấy all ngdung nếu mk chuyển id = ALL thì lấy all ngdung ra 
+    //nếu truyền id của ngdung tức là  1 2 3  thì we sẽ lấy chính xác ngdung ấy ra 
+    let id = req.body.id;
+    if (!id) {
+        //nếu ta ko truyền lên id thì ta sẽ báo lỗi như này lun
+        return res.status(200).json({
+            errCode: 1,
+            errMessage: `missing required parameters`,
+            users: []
+
+        })
+
+    }
+    let users = await userService.getAllUser(id);
+    console.log(users)
+    return res.status(200).json({
+        errCode: 0,
+        errMessage: 'ok',
+        users
+
+    })
 }
 
 module.exports = {
-    handleLogin: handleLogin
+    handleLogin: handleLogin,
+    handleGetAllUsers: handleGetAllUsers
 }

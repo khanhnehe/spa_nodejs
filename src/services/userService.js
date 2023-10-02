@@ -87,7 +87,40 @@ let checkUserEmail = (userEmail) => {
 
 
 }
+let getAllUser = (userId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let users = 'abc';
+            if (userId === 'ALL') {
+                users = await db.User.findAll({
+                    attributes: {
+                        //exclude ngoại trừ cái mk ko muốn in ra 
+                        exclude: ['password']
+                    },
+                })
+
+            } if (userId && userId !== 'ALL') {
+                users = await db.User.findOne({
+                    where: {
+                        //tức là id ta truyền vào phải bằng vs 1 cột id trong bd 
+                        id: userId
+                    },
+                    attributes: {
+                        //exclude ngoại trừ cái mk ko muốn in ra 
+                        exclude: ['password']
+                    },
+
+                })
+            }
+            resolve(users)
+
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
 
 module.exports = {
-    handleUserLogin: handleUserLogin
+    handleUserLogin: handleUserLogin,
+    getAllUser: getAllUser
 }
