@@ -22,6 +22,9 @@ let initWebRouters = (app) => {
   //những cái api nào mà ta sd bên phía react thì ta sẽ bắt đầu bằng tiền tố /api/ để cho nó phân biêt vs cái ta làm từ trước tới nay
   router.post('/api/login', userController.handleLogin)
   router.get('/api/get-all-users', userController.handleGetAllUsers)
+  router.post('/api/post-create-new-user', userController.handleCreateNewUser)
+  router.put('/api/put-edit-user', userController.handleEditUser)
+  router.delete('/api/delete-user', userController.handleDeleteUser)
 
   return app.use("/", router);
 };

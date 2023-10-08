@@ -33,7 +33,7 @@ let handleGetAllUsers = async (req, res) => {
     //id ở đây sẽ là id or ALL -> có 2 kiểu này tức là ta sẽ viết 2 api trong 1 lun
     //nếu api là lấy all ngdung nếu mk chuyển id = ALL thì lấy all ngdung ra 
     //nếu truyền id của ngdung tức là  1 2 3  thì we sẽ lấy chính xác ngdung ấy ra 
-    let id = req.body.id;
+    let id = req.query.id;
     if (!id) {
         //nếu ta ko truyền lên id thì ta sẽ báo lỗi như này lun
         return res.status(200).json({
@@ -54,7 +54,40 @@ let handleGetAllUsers = async (req, res) => {
     })
 }
 
+let handleCreateNewUser = async (req, res) => {
+    let message = await userService.createNewUser(req.body)
+    return res.status(200).json(message)
+
+}
+
+let handleDeleteUser = async (req, res) => {
+    //validate
+    if (!req.body.id) {
+        return res.status(200).json({
+            errCode: 1,
+            errMessage: 'Missing required parameters!'
+        })
+    }
+    let message = await userService.deleteUser(req.body.id)
+    return res.status(200).json(message)
+
+}
+
+//ở đây ta chỉ update 1 user
+let handleEditUser = async (req, res) => {
+    //hàm req.body giúp we có thể lấy đc tất cả các input đã đặt cái name
+    //ta đặt name là gì thì req.body chấm name đó thì sẽ ra đc số liệu đó
+    let data = req.body;
+    let message = await userService.updateUserData(data);
+    return res.status(200).json(message)
+
+
+}
+
 module.exports = {
     handleLogin: handleLogin,
-    handleGetAllUsers: handleGetAllUsers
+    handleGetAllUsers: handleGetAllUsers,
+    handleCreateNewUser: handleCreateNewUser,
+    handleEditUser: handleEditUser,
+    handleDeleteUser: handleDeleteUser
 }
