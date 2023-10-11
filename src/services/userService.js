@@ -143,7 +143,7 @@ let createNewUser = async (data) => {
             if (check === true) {
                 resolve({
                     errCode: 1,
-                    message: 'Your email already exists, please try another email'
+                    errMessage: 'Your email already exists, please try another email'
 
                 })
             }
