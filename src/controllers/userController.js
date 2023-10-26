@@ -80,7 +80,26 @@ let handleEditUser = async (req, res) => {
     let data = req.body;
     let message = await userService.updateUserData(data);
     return res.status(200).json(message)
+}
 
+
+//video 52 phân quyền user
+let getAllCode = async (req, res) => {
+    try {
+        //check đk
+
+        let data = await userService.getAllCodeService(req.query.type);
+        return res.status(200).json(data)
+
+    }
+    // e này là exception chứ ko phải err
+    catch (e) {
+        console.log('get All code ', e)
+        return res.status(200).json({
+            errCode: -1,
+            errMessage: 'Error from server'
+        });
+    }
 
 }
 
@@ -89,5 +108,6 @@ module.exports = {
     handleGetAllUsers: handleGetAllUsers,
     handleCreateNewUser: handleCreateNewUser,
     handleEditUser: handleEditUser,
-    handleDeleteUser: handleDeleteUser
+    handleDeleteUser: handleDeleteUser,
+    getAllCode: getAllCode
 }

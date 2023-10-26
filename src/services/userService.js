@@ -1,4 +1,5 @@
 //import db để check đc email dưới db
+import { response } from "express";
 import db from "../models/index";
 //dung để hash pass nên có mới compare đc password
 import bcrypt from "bcryptjs";
@@ -249,6 +250,37 @@ let updateUserData = async (data) => {
     })
 }
 
+let getAllCodeService = (typeInput) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            //check đk
+            if (!typeInput) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Missing required parameters'
+                })
+
+
+            } else {
+                // tạo biến để hứng làm điểm tựa để làm mấy cái khác
+                let response = {};
+                let allcode = await db.AllCode.findAll({
+                    where: { type: typeInput }
+                });
+                response.errCode = 0;
+                response.data = allcode;
+                resolve(response)
+            }
+
+        } catch (e) {
+
+            reject(e)
+        }
+
+    })
+
+}
+
 
 
 module.exports = {
@@ -256,5 +288,6 @@ module.exports = {
     getAllUser: getAllUser,
     createNewUser: createNewUser,
     deleteUser: deleteUser,
-    updateUserData: updateUserData
+    updateUserData: updateUserData,
+    getAllCodeService: getAllCodeService
 }
