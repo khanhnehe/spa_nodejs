@@ -26,7 +26,8 @@ let initWebRouters = (app) => {
   router.put('/api/put-edit-user', userController.handleEditUser)
   router.delete('/api/delete-user', userController.handleDeleteUser)
 
-  router.get('/allcode/', userController.getAllCode)
+  //redux
+  router.get('/api/allcode/', userController.getAllCode)
 
   return app.use("/", router);
 };

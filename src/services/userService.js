@@ -15,7 +15,7 @@ let handleUserLogin = (email, password) => {
                 //check nếu user exist tồn tại rồi  == true ta sẽ compare password
                 let user = await db.User.findOne({
 
-                    attributes: ['email', 'roleId', 'password'],
+                    attributes: ['email', 'roleId', 'password', 'firstName', 'lastName'],
                     where: {
                         //email thứ 2 là cái email mà ta truyền vào
                         email: email
