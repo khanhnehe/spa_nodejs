@@ -157,7 +157,7 @@ let createNewUser = async (data) => {
                     lastName: data.lastName,
                     address: data.address,
                     phonemumber: data.phonemumber,
-                    gender: data.gender === "1" ? true : false,
+                    gender: data.gender,
                     roleId: data.roleId,
                 });
                 resolve({
