@@ -40,10 +40,10 @@ app.use(
 
 //config app
 //trước khi config app sẽ cấu hình các tham số mà phía client gửi lên
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-//config app
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json({ limit: '50mb' }));
+app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 viewEngine(app);
 initWebRouters(app);
 
