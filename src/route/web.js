@@ -32,6 +32,12 @@ let initWebRouters = (app) => {
 
   //doctor(staff)63
   router.get('/api/top-doctor-home', doctorController.getTopDoctorHome)
+  //67
+  router.get('/api/get-all-doctor', doctorController.getAllDoctor)
+  router.post('/api/save-info-doctor', doctorController.postSaveInfoDoctor)
+  //68
+  router.get('/api/get-detail-doctor-by-id', doctorController.getDetailDoctorById)
+
 
   return app.use("/", router);
 };

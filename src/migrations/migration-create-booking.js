@@ -11,7 +11,7 @@ module.exports = {
       statusId: {
         type: Sequelize.STRING,
       },
-      doctorId: {
+      staffId: {
         type: Sequelize.INTEGER,
       },
       patientID: {

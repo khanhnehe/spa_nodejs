@@ -12,6 +12,10 @@ module.exports = (sequelize, DataTypes) => {
       //1 user sẽ belongto tức thuộc về nhiều cái model allcode
       User.belongsTo(models.AllCode, { foreignKey: 'positionId', targetKey: 'keyMap', as: 'positionData' })
       User.belongsTo(models.AllCode, { foreignKey: 'gender', targetKey: 'keyMap', as: 'genderData' })
+
+      //1 User chỉ có 1 markdown mà markdown cx chỉ có 1 user
+      User.hasOne(models.Markdown, { foreignKey: 'staffId' })
+
     }
   }
   User.init(
