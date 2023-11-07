@@ -9,7 +9,8 @@ module.exports = (sequelize, DataTypes) => {
          */
         static associate(models) {
             //68 1 Markdown  chỉ có 1 user
-            //tại sao ko dùng hasOn mà dùng belongsTo
+            //tại sao ko dùng hasOn mà dùng belongsTo vì Key nó là 'User'
+            //vì ko thể dùng 2 thằng mà có hasOne được các quan hệ khác cx v
             Markdown.belongsTo(models.User, { foreignKey: 'staffId' })
         }
     }
