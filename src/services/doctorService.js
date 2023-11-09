@@ -162,17 +162,14 @@ let bulkCreateSchedule = (data) => {
                     raw: true
                 })
 
-                //convert date
-                if (existing && existing.length > 0) {
-                    existing = existing.map(item => {
-                        item.date = new Date(item.date).getTime();
-                        return item;
-                    })
-                }
+                // console.log('check existing', existing)
+                // console.log('check schedule', schedule)
+
+
                 //compare different
                 //trường so sánh ở đây là timeType, date tức ta phải so sánh xem là ngày hôm nay vào khoảng thời gian đấy nó đã tồn tạ hay chưa
                 let toCreate = _.differenceWith(schedule, existing, (a, b) => {
-                    return a.timeType === b.timeType && a.date === b.date;
+                    return a.timeType === b.timeType && +a.date === +b.date;
                 })
 
                 //create data
@@ -196,10 +193,50 @@ let bulkCreateSchedule = (data) => {
     )
 }
 
+let getScheduleByDate = (staffId, date) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!staffId || !date) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Missing required parameters'
+                })
+            }
+            else {
+                let dataSchedule = await db.Schedule.findAll({
+                    where: {
+                        staffId: staffId,
+                        date: date
+                    },
+                    //76
+                    include: [
+
+                        { model: db.AllCode, as: 'timeTypeData', attributes: ['valueEN', 'valueVI'] },
+
+                    ],
+                    raw: true,
+                    nest: true
+                })
+                if (!dataSchedule) dataSchedule = [];
+
+                resolve({
+                    errCode: 0,
+                    data: dataSchedule
+                })
+            }
+
+        } catch (e) {
+            reject(e)
+        }
+
+    })
+}
+
 module.exports = {
     getTopDoctorHome: getTopDoctorHome,
     getAllDoctors: getAllDoctors,
     saveDetailInfoDoctor: saveDetailInfoDoctor,
     getDetailDoctorById: getDetailDoctorById,
-    bulkCreateSchedule: bulkCreateSchedule
+    bulkCreateSchedule: bulkCreateSchedule,
+    getScheduleByDate: getScheduleByDate
 }
