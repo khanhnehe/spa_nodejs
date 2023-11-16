@@ -209,6 +209,7 @@ let getScheduleByDate = (staffId, date) => {
                         date: date
                     },
                     //76
+                    // join 2 bảng lại 
                     include: [
 
                         { model: db.AllCode, as: 'timeTypeData', attributes: ['valueEN', 'valueVI'] },
