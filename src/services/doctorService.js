@@ -62,38 +62,71 @@ let getAllDoctors = () => {
     })
 }
 
-let saveDetailInfoDoctor = (inputData) => {
-    return new Promise(async (resolve, reject) => {
-        try {
-            if (!inputData.staffId || !inputData.contentHTML || !inputData.contentMarkdown) {
-                resolve({
-                    errCode: 1,
-                    errMessage: 'Missing parameter information'
+const upsertRecord = async (model, condition, data) => {
+    try {
+        const existingRecord = await model.findOne({ where: condition, raw: true });
 
-                })
-            }
-            else {
-                await db.Markdown.create({
-                    contentHTML: inputData.contentHTML,
-                    contentMarkdown: inputData.contentMarkdown,
-                    description: inputData.description,
-                    staffId: inputData.staffId
-                }
-                )
-
-                resolve({
-                    errCode: 0,
-                    errMessage: 'Save information doctor succeed! '
-                })
-            }
-
-
-        } catch (e) {
-            reject(e)
+        if (!existingRecord) {
+            // Create a new record if it doesn't exist
+            await model.create(data);
+        } else {
+            // Update the existing record
+            await model.update(data, { where: condition });
         }
-    })
 
-}
+        return {
+            errCode: 0,
+            errMessage: `Save information for ${model.name} succeed!`
+        };
+    } catch (error) {
+        return {
+            errCode: 1,
+            errMessage: `Error saving information for ${model.name}: ${error.message}`
+        };
+    }
+};
+
+let saveDetailInfoDoctor = async (inputData) => {
+    try {
+        if (!inputData.staffId || !inputData.contentHTML
+            || !inputData.contentMarkdown || !inputData.action
+            || !inputData.selectedPrice || !inputData.selectedPayment
+        ) {
+            return {
+                errCode: 1,
+                errMessage: 'Missing parameter information'
+            };
+        } else {
+            // Upsert to Markdown table
+            await upsertRecord(db.Markdown, { staffId: inputData.staffId }, {
+                contentHTML: inputData.contentHTML,
+                contentMarkdown: inputData.contentMarkdown,
+                description: inputData.description,
+                staffId: inputData.staffId
+            });
+
+            // Upsert to Staff_infor table
+            await upsertRecord(db.Staff_infor, { staffId: inputData.staffId }, {
+                staffId: inputData.staffId,
+                priceId: inputData.selectedPrice,
+                paymentId: inputData.selectedPayment
+            });
+
+            // Add more tables as needed
+
+            return {
+                errCode: 0,
+                errMessage: 'Save information doctor succeed!'
+            };
+        }
+    } catch (e) {
+        return {
+            errCode: 1,
+            errMessage: 'Error: ' + e.message
+        };
+    }
+};
+
 let getDetailDoctorById = (inputId) => {
     return new Promise(async (resolve, reject) => {
         try {
