@@ -8,7 +8,12 @@ module.exports = (sequelize, DataTypes) => {
          * The `models/index` file will call this method automatically.
          */
         static associate(models) {
-            // define association here
+            //80 Staff_infor quan hệ vs table Allcode
+
+            Staff_infor.belongsTo(models.User, { foreignKey: 'staffId' })
+            Staff_infor.belongsTo(models.AllCode, { foreignKey: 'priceId', targetKey: 'keyMap', as: 'priceTypeData' })
+            Staff_infor.belongsTo(models.AllCode, { foreignKey: 'paymentId', targetKey: 'keyMap', as: 'paymentTypeData' })
+
         }
     }
     Staff_infor.init(

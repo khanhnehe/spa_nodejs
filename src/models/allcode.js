@@ -14,6 +14,9 @@ module.exports = (sequelize, DataTypes) => {
       AllCode.hasMany(models.User, { foreignKey: 'gender', as: 'genderData' })
       //76
       AllCode.hasMany(models.Schedule, { foreignKey: 'timeType', as: 'timeTypeData' })
+      //80 1 Allcode có nhiều Staff_infor, trường priceId sẽ match vs cái table Allcode của we
+      AllCode.hasMany(models.Staff_infor, { foreignKey: 'priceId', as: 'priceTypeData' })
+      AllCode.hasMany(models.Staff_infor, { foreignKey: 'paymentId', as: 'paymentTypeData' })
 
     }
   }

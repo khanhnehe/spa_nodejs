@@ -15,6 +15,8 @@ module.exports = (sequelize, DataTypes) => {
 
       //1 User chỉ có 1 markdown mà markdown cx chỉ có 1 user
       User.hasOne(models.Markdown, { foreignKey: 'staffId' })
+      //80table  User sẽ tự động match vs trường  staffId trên cái table Staff_infor
+      User.hasOne(models.Staff_infor, { foreignKey: 'staffId' })
 
     }
   }

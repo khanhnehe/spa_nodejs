@@ -152,9 +152,20 @@ let getDetailDoctorById = (inputId) => {
                             attributes: ['description', 'contentMarkdown', 'contentHTML']
                         },
                         { model: db.AllCode, as: 'positionData', attributes: ['valueEN', 'valueVI'] },
+                        //Staff_infor
+                        {
+                            model: db.Staff_infor,
+                            attributes: {
+                                exclude: ['id', 'staffId']
+                            },
+                            include: [
+                                { model: db.AllCode, as: 'priceTypeData', attributes: ['valueEN', 'valueVI'] },
+                                { model: db.AllCode, as: 'paymentTypeData', attributes: ['valueEN', 'valueVI'] }
+                            ]
+                        },
 
                     ],
-                    raw: true,
+                    raw: false,
                     nest: true
                 })
 
@@ -266,11 +277,47 @@ let getScheduleByDate = (staffId, date) => {
     })
 }
 
+//81
+let getExtraInforDoctorById = (idInput) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+
+            if (!idInput) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Missing required parameters (staffId)'
+                })
+            } else {
+                let data = await db.Staff_infor.findOne({
+                    where: { staffId: idInput },
+                    attributes: {
+                        exclude: ['id', 'staffId']
+                    },
+                    include: [
+                        { model: db.AllCode, as: 'priceTypeData', attributes: ['valueEN', 'valueVI'] },
+                        { model: db.AllCode, as: 'paymentTypeData', attributes: ['valueEN', 'valueVI'] }
+                    ],
+                    raw: false,
+                    nest: true
+                })
+                if (!data) data = {};
+                resolve({
+                    errCode: 0,
+                    data: data
+                })
+            }
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
 module.exports = {
     getTopDoctorHome: getTopDoctorHome,
     getAllDoctors: getAllDoctors,
     saveDetailInfoDoctor: saveDetailInfoDoctor,
     getDetailDoctorById: getDetailDoctorById,
     bulkCreateSchedule: bulkCreateSchedule,
-    getScheduleByDate: getScheduleByDate
+    getScheduleByDate: getScheduleByDate,
+    getExtraInforDoctorById: getExtraInforDoctorById
 }
