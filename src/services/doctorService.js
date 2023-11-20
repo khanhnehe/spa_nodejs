@@ -312,6 +312,55 @@ let getExtraInforDoctorById = (idInput) => {
     })
 }
 
+let getProfileDoctorById = (inputId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!inputId) {
+                resolve({
+                    errCode: -1,
+                    errMessage: "Missing required parameter"
+                })
+            }
+            else {
+                let data = await db.User.findOne({
+                    where: { id: inputId },
+                    attributes: {
+                        exclude: ['password']
+                    },
+
+                    include: [
+                        { model: db.AllCode, as: 'positionData', attributes: ['valueEN', 'valueVI'] },
+                        //Staff_infor
+                        {
+                            model: db.Staff_infor,
+                            attributes: {
+                                exclude: ['id', 'staffId']
+                            },
+                            include: [
+                                { model: db.AllCode, as: 'priceTypeData', attributes: ['valueEN', 'valueVI'] },
+                                { model: db.AllCode, as: 'paymentTypeData', attributes: ['valueEN', 'valueVI'] }
+                            ]
+                        },
+
+                    ],
+                    raw: false,
+                    nest: true
+                })
+
+                if (!data) data = {};
+                resolve({
+                    errCode: 0,
+                    data: data
+                })
+
+            }
+        } catch (e) {
+            reject(e)
+        }
+
+    })
+}
+
 module.exports = {
     getTopDoctorHome: getTopDoctorHome,
     getAllDoctors: getAllDoctors,
@@ -319,5 +368,6 @@ module.exports = {
     getDetailDoctorById: getDetailDoctorById,
     bulkCreateSchedule: bulkCreateSchedule,
     getScheduleByDate: getScheduleByDate,
-    getExtraInforDoctorById: getExtraInforDoctorById
+    getExtraInforDoctorById: getExtraInforDoctorById,
+    getProfileDoctorById: getProfileDoctorById
 }
