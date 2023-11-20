@@ -2,7 +2,7 @@ import express from "express";
 import homeController from "../controllers/homeController";
 import userController from "../controllers/userController";
 import doctorController from "../controllers/doctorController"
-
+import patientController from "../controllers/patientController"
 let router = express.Router();
 
 let initWebRouters = (app) => {
@@ -46,6 +46,10 @@ let initWebRouters = (app) => {
   router.get('/api/get-extra-infor-doctor-by-id', doctorController.getExtraInforDoctorById)
   //83
   router.get('/api/get-profile-doctor-by-id', doctorController.getProfileDoctorById)
+  //84 tự động tạo tk khi user đặt lịch hẹn
+  //patient là khách hàng
+  router.post('/api/patient-book-appointment', patientController.postBookAppointment)
+
 
 
 
