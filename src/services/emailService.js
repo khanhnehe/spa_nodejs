@@ -2,11 +2,12 @@ require('dotenv').config();
 import nodemailer from 'nodemailer'
 
 let sendSimpleEmail = async (dataSend) => {
+    // console.log("Data for sending email:", dataSend);
 
     let transporter = nodemailer.createTransport({
         host: "smtp.gmail.com",
-        port: 587,
-        secure: false,
+        port: 465,
+        secure: true,
         auth: {
             user: process.env.EMAIL_APP,
             pass: process.env.EMAIL_APP_PASSWORD
@@ -27,10 +28,11 @@ let sendSimpleEmail = async (dataSend) => {
         </a></div>
         <div><p>Cảm ơn bạn đã lựa chọn dịch vụ của chúng tôi!</p></div>
         
-        `, // html body
+        ` // html body
     });
-
+    return info;
 }
+
 async function main() {
 }
 module.exports = {

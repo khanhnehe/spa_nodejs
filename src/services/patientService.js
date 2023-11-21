@@ -4,7 +4,7 @@ import emailService from '../services/emailService'
 let postBookAppointment = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            if (!data.email || !data.staffId || !data.timeType) {
+            if (!data.email || !data.staffId || !data.timeType || !data.fullName) {
                 resolve({
                     errCode: 1,
                     errMessage: "Missing required parameter"
@@ -14,12 +14,12 @@ let postBookAppointment = (data) => {
                 //gọi email
                 await emailService.sendSimpleEmail({
                     receiversEmail: data.email,
-                    patientName: 'linda',
-                    time: '8:00-9:00 thứ 7 1/1/2023',
-                    staffName: 'Khánh',
+                    patientName: data.fullName,
+                    time: data.timeString,
+                    staffName: data.staffName,
                     receiversLink: 'https://github.com/',
-
                 })
+
 
 
                 //upsert patient -> nếu như nó tìm thấy email nó trả ra user -> ko thì create user
