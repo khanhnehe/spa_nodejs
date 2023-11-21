@@ -1,6 +1,6 @@
 import { response } from "express";
 import db from "../models/index";
-
+import emailService from '../services/emailService'
 let postBookAppointment = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -11,6 +11,17 @@ let postBookAppointment = (data) => {
                 })
             }
             else {
+                //gọi email
+                await emailService.sendSimpleEmail({
+                    receiversEmail: data.email,
+                    patientName: 'linda',
+                    time: '8:00-9:00 thứ 7 1/1/2023',
+                    staffName: 'Khánh',
+                    receiversLink: 'https://github.com/',
+
+                })
+
+
                 //upsert patient -> nếu như nó tìm thấy email nó trả ra user -> ko thì create user
                 let user = await db.User.findOrCreate({
                     where: { email: data.email },

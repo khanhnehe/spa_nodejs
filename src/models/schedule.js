@@ -9,7 +9,13 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       //76 1 Schedule thuộc về 1 allcode
-      Schedule.belongsTo(models.AllCode, { foreignKey: 'timeType', targetKey: 'keyMap', as: 'timeTypeData' })
+      Schedule.belongsTo(models.AllCode,
+        { foreignKey: 'timeType', targetKey: 'keyMap', as: 'timeTypeData' })
+
+      Schedule.belongsTo(models.User,
+        { foreignKey: 'staffId', targetKey: 'id', as: 'staffData' })
+
+
 
     }
   }

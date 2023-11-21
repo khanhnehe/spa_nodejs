@@ -18,6 +18,9 @@ module.exports = (sequelize, DataTypes) => {
       //80table  User sẽ tự động match vs trường  staffId trên cái table Staff_infor
       User.hasOne(models.Staff_infor, { foreignKey: 'staffId' })
 
+      //87
+      User.hasOne(models.Schedule, { foreignKey: 'staffId', as: 'staffData' })
+
     }
   }
   User.init(

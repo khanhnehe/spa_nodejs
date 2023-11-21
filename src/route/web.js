@@ -40,7 +40,7 @@ let initWebRouters = (app) => {
 
   //74 
   router.post('/api/bulk-create-schedule', doctorController.bulkCreateSchedule)
-  //75
+  //75 //87 lấy cái này để lấy name staff
   router.get('/api/get-schedule-doctor-by-date', doctorController.getScheduleByDate)
   //81
   router.get('/api/get-extra-infor-doctor-by-id', doctorController.getExtraInforDoctorById)
