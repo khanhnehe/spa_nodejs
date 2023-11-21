@@ -1,6 +1,13 @@
 import { response } from "express";
 import db from "../models/index";
 import emailService from '../services/emailService'
+import { v4 as uuidv4 } from 'uuid';
+
+let buildUrlEmail = (staffId, token) => {
+    let result = `${process.env.URL_REACT}/verify-booking?token=${token}&staffId=${staffId}`;
+    return result;
+}
+
 let postBookAppointment = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -12,12 +19,13 @@ let postBookAppointment = (data) => {
             }
             else {
                 //gọi email
+                let token = uuidv4();
                 await emailService.sendSimpleEmail({
                     receiversEmail: data.email,
                     patientName: data.fullName,
                     time: data.timeString,
                     staffName: data.staffName,
-                    receiversLink: 'https://github.com/',
+                    receiversLink: buildUrlEmail(data.staffId, token),
                 })
 
 
@@ -41,7 +49,8 @@ let postBookAppointment = (data) => {
                             staffId: data.staffId,
                             patientID: user[0].id,
                             // date: data.date,
-                            timeType: data.timeType
+                            timeType: data.timeType,
+                            token: token
                         }
 
                     })
@@ -62,6 +71,49 @@ let postBookAppointment = (data) => {
     })
 }
 
+let verifyBookAppointment = (data) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!data.token || !data.staffId) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Missing parameter'
+                })
+            }
+            else {
+                let appointment = await db.Booking.findOne({
+                    where: {
+                        staffId: data.staffId,
+                        token: data.token,
+                        statusId: 'S1'
+                    },
+                    raw: false
+                })
+
+                if (appointment) {
+                    appointment.statusId = 'S2';
+                    await appointment.save();
+
+                    resolve({
+                        errCode: 0,
+                        errMessage: 'Update lịch hẹn thành công'
+                    })
+                }
+                else {
+                    resolve({
+                        errCode: 2,
+                        errMessage: 'cuộc hẹn đã được kích hoạt hoặc không tồn tại',
+                    })
+                }
+            }
+
+        } catch (e) {
+            reject(e)
+        }
+    })
+}
+
 module.exports = {
-    postBookAppointment: postBookAppointment
+    postBookAppointment: postBookAppointment,
+    verifyBookAppointment: verifyBookAppointment
 }

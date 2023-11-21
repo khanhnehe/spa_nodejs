@@ -50,6 +50,10 @@ let initWebRouters = (app) => {
   //patient là khách hàng
   router.post('/api/patient-book-appointment', patientController.postBookAppointment)
 
+  //88 xác minh bôk appointment
+
+  router.post('/api/verify-book-appointment', patientController.verifyBookAppointment)
+
 
 
 
