@@ -4,7 +4,7 @@ import db from "../models/index";
 let postBookAppointment = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            if (!data.email || !data.staffId || !data.timeType || !data.date) {
+            if (!data.email || !data.staffId || !data.timeType) {
                 resolve({
                     errCode: 1,
                     errMessage: "Missing required parameter"
@@ -29,7 +29,7 @@ let postBookAppointment = (data) => {
                             statusId: 'S1',
                             staffId: data.staffId,
                             patientID: user[0].id,
-                            date: data.date,
+                            // date: data.date,
                             timeType: data.timeType
                         }
 
