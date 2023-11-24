@@ -16,11 +16,6 @@
                 alert("Phải nhập vào 1 email");
                 return false;
             }
-            let pass = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$/g;
-            if (pass.test(fm.password.value) == false) {
-                alert("Phải nhập 1 mật khẩu có 1 ký tự in hoa, 1 ký tự thường, 1 ký tự đặc biệt, 1 số và độ dài phải trên 8");
-                return false;
-            }
 
 
             let phone = /^\d{10}$/;

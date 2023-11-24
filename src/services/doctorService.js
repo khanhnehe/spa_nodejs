@@ -85,46 +85,98 @@ const upsertRecord = async (model, condition, data) => {
         };
     }
 };
+// hàm giúp check all các hàm ở saveDetailInfoDoctor 1 cách dễ dàng
+let checkRequiredFields = (inputData) => {
+    let arrFields = [
+        'staffId', 'contentHTML', 'contentMarkdown', 'action',
+        'selectedPrice', 'selectedPayment', 'specialtyId'
+    ]
 
-let saveDetailInfoDoctor = async (inputData) => {
-    try {
-        if (!inputData.staffId || !inputData.contentHTML
-            || !inputData.contentMarkdown || !inputData.action
-            || !inputData.selectedPrice || !inputData.selectedPayment
-        ) {
-            return {
-                errCode: 1,
-                errMessage: 'Missing parameter information'
-            };
-        } else {
-            // Upsert to Markdown table
-            await upsertRecord(db.Markdown, { staffId: inputData.staffId }, {
-                contentHTML: inputData.contentHTML,
-                contentMarkdown: inputData.contentMarkdown,
-                description: inputData.description,
-                staffId: inputData.staffId
-            });
-
-            // Upsert to Staff_infor table
-            await upsertRecord(db.Staff_infor, { staffId: inputData.staffId }, {
-                staffId: inputData.staffId,
-                priceId: inputData.selectedPrice,
-                paymentId: inputData.selectedPayment
-            });
-
-            // Add more tables as needed
-
-            return {
-                errCode: 0,
-                errMessage: 'Save information doctor succeed!'
-            };
+    let isValid = true;
+    let element = '';
+    for (let i = 0; i < arrFields.length; i++) {
+        if (!inputData[arrFields[i]]) {
+            isValid = false;
+            element = arrFields[i];
+            break;
         }
-    } catch (e) {
-        return {
-            errCode: 1,
-            errMessage: 'Error: ' + e.message
-        };
+
     }
+    return {
+        isValid: isValid,
+        element: element
+    }
+}
+
+
+let saveDetailInfoDoctor = (inputData) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            let checkObj = checkRequiredFields(inputData)
+            if (checkObj.isValid === false) {
+                resolve({
+                    errCode: 1,
+                    errMessage: `Missing parameter : ${checkObj.element}`
+                });
+            } else {
+                // Upsert to Markdown table
+                if (inputData.action === 'CREATE') {
+                    await db.Markdown.create({
+                        contentHTML: inputData.contentHTML,
+                        contentMarkdown: inputData.contentMarkdown,
+                        description: inputData.description,
+                        staffId: inputData.staffId,
+                    })
+
+                }
+                else if (inputData.action === 'EDIT') {
+                    let doctorMarkdown = await db.Markdown.findOne({
+                        where: { staffId: inputData.staffId },
+                        raw: false
+                    })
+
+                    if (doctorMarkdown) {
+                        doctorMarkdown.contentHTML = inputData.contentHTML;
+                        doctorMarkdown.contentMarkdown = inputData.contentMarkdown;
+                        doctorMarkdown.description = inputData.description;
+                        await doctorMarkdown.save()
+                    }
+                }
+                //upsert to staff_infor table
+                let staffInfor = await db.Staff_infor.findOne({
+                    where: { staffId: inputData.staffId },
+                    raw: false
+                })
+
+                if (staffInfor) {
+                    //update
+                    staffInfor.staffId = inputData.staffId;
+                    staffInfor.priceId = inputData.selectedPrice;
+                    staffInfor.paymentId = inputData.selectedPayment;
+                    staffInfor.specialtyId = inputData.specialtyId;
+                    await staffInfor.save();
+                }
+
+                else {
+                    //create
+                    await db.Staff_infor.create({
+                        staffId: inputData.staffId,
+                        priceId: inputData.selectedPrice,
+                        paymentId: inputData.selectedPayment,
+                        specialtyId: inputData.specialtyId,
+                    })
+                }
+                // Add more tables as needed
+                resolve({
+                    errCode: 0,
+                    errMessage: 'Save information doctor succeed!'
+                });
+            }
+        } catch (e) {
+            reject(e)
+        }
+    })
+
 };
 
 let getDetailDoctorById = (inputId) => {
@@ -370,5 +422,6 @@ module.exports = {
     bulkCreateSchedule: bulkCreateSchedule,
     getScheduleByDate: getScheduleByDate,
     getExtraInforDoctorById: getExtraInforDoctorById,
-    getProfileDoctorById: getProfileDoctorById
+    getProfileDoctorById: getProfileDoctorById,
+    checkRequiredFields
 }

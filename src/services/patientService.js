@@ -11,7 +11,7 @@ let buildUrlEmail = (staffId, token) => {
 let postBookAppointment = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            if (!data.email || !data.staffId || !data.timeType || !data.fullName) {
+            if (!data.email || !data.staffId || !data.timeType || !data.fullName || !data.address) {
                 resolve({
                     errCode: 1,
                     errMessage: "Missing required parameter"
@@ -35,7 +35,9 @@ let postBookAppointment = (data) => {
                     where: { email: data.email },
                     defaults: {
                         email: data.email,
-                        roleId: 'R3'
+                        roleId: 'R3',
+                        address: data.address,
+                        phoneNumber: data.phonemumber,
                     }
                 })
                 //có trả ra user và có user 0 
