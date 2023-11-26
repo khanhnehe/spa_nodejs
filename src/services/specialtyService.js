@@ -57,7 +57,60 @@ let getAllSpecialty = () => {
     })
 }
 
+//id lấy bnagwf id của Staff_infor specialtyId
+let getDetailSpecialtyById = (inputId, location) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!inputId || !location) {
+                resolve({
+                    errCode: 1,
+                    errMessage: 'Missing parameter'
+                });
+            } else {
+                let data = await db.Specialty.findOne({
+                    where: {
+                        id: inputId
+                    },
+                    attributes: ['name', 'descriptionHTML', 'descriptionMarkdown']
+                });
+
+                if (data) {
+                    let staffSpecialty = [];
+                    if (location === 'ALL') {
+                        staffSpecialty = await db.Staff_infor.findAll({
+                            where: { specialtyId: inputId },
+                            attributes: ['staffId']
+                        });
+                    }
+                    else {
+                        //find by location
+                        staffSpecialty = await db.Staff_infor.findAll({
+                            where: {
+                                specialtyId: inputId,
+                                specialtyId: location
+                            },
+                            attributes: ['staffId', 'specialtyId']
+                        });
+                    }
+
+                    data.staffSpecialty = staffSpecialty;
+                } else data = {};
+                resolve({
+                    errMessage: 'ok',
+                    errCode: 0,
+                    data
+                });
+            }
+        } catch (e) {
+            reject(e);
+        }
+    });
+};
+
+
+
 module.exports = {
     createSpecialty: createSpecialty,
-    getAllSpecialty: getAllSpecialty
+    getAllSpecialty: getAllSpecialty,
+    getDetailSpecialtyById: getDetailSpecialtyById
 }
