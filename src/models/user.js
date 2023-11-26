@@ -19,7 +19,10 @@ module.exports = (sequelize, DataTypes) => {
       User.hasOne(models.Staff_infor, { foreignKey: 'staffId' })
 
       //87
-      User.hasOne(models.Schedule, { foreignKey: 'staffId', as: 'staffData' })
+      User.hasMany(models.Schedule, { foreignKey: 'staffId', as: 'staffData' })
+
+      // quan hện 1 nhiều vs Booking
+      User.hasMany(models.Booking, { foreignKey: 'patientID', as: 'patientData' })
 
     }
   }

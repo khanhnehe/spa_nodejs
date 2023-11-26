@@ -63,7 +63,8 @@ let initWebRouters = (app) => {
   //94
   router.get('/api/get-detail-specialty-by-id', specialtyController.getDetailSpecialtyById)
 
-
+  //98 get danh sách custom đặt hẹn
+  router.get('/api/get-list-customer-for-doctor', doctorController.getListCustomerForDoctor)
 
 
 

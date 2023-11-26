@@ -413,6 +413,49 @@ let getProfileDoctorById = (inputId) => {
 
     })
 }
+let getListCustomerForDoctor = (staffId) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+            if (!staffId) {
+                resolve({
+                    errCode: -1,
+                    errMessage: "Missing required parameter"
+                })
+            }
+            //bắt đầu lấy bệnh nhân 
+            //chỉ lấy khi customer xác nhận lịch hẹn
+            else {
+                let data = await db.Booking.findAll({
+                    //lấy theo 	statusId S2 tức đã xác nhận trên db
+                    where: {
+                        statusId: 'S2',
+                        staffId: staffId,
+                        // date: date
+                    },
+                    include: [
+                        {
+                            // cần định nghĩa modal useer và booking để nó có thể chạy
+                            model: db.User, as: 'patientData',
+                            attributes: ['email', 'lastName', 'phonemumber', 'address']
+                        },
+                    ],
+                    raw: false,
+                    nest: true
+                })
+
+                resolve({
+                    errCode: 0,
+                    data: data
+                })
+
+            }
+        }
+        catch (e) {
+            reject(e)
+        }
+    })
+
+}
 
 module.exports = {
     getTopDoctorHome: getTopDoctorHome,
@@ -423,5 +466,5 @@ module.exports = {
     getScheduleByDate: getScheduleByDate,
     getExtraInforDoctorById: getExtraInforDoctorById,
     getProfileDoctorById: getProfileDoctorById,
-    checkRequiredFields
+    getListCustomerForDoctor: getListCustomerForDoctor
 }

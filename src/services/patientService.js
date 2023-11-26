@@ -11,7 +11,8 @@ let buildUrlEmail = (staffId, token) => {
 let postBookAppointment = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            if (!data.email || !data.staffId || !data.timeType || !data.fullName || !data.address) {
+            if (!data.email || !data.staffId || !data.timeType
+                || !data.lastName || !data.address || !data.phonemumber) {
                 resolve({
                     errCode: 1,
                     errMessage: "Missing required parameter"
@@ -22,7 +23,7 @@ let postBookAppointment = (data) => {
                 let token = uuidv4();
                 await emailService.sendSimpleEmail({
                     receiversEmail: data.email,
-                    patientName: data.fullName,
+                    patientName: data.lastName,
                     time: data.timeString,
                     staffName: data.staffName,
                     receiversLink: buildUrlEmail(data.staffId, token),
@@ -37,9 +38,12 @@ let postBookAppointment = (data) => {
                         email: data.email,
                         roleId: 'R3',
                         address: data.address,
-                        phoneNumber: data.phonemumber,
+                        phonemumber: data.phonemumber,
+                        lastName: data.lastName,
+                        // date: data.date
                     }
                 })
+                //create booking record
                 //có trả ra user và có user 0 
                 if (user && user[0]) {
                     await db.Booking.findOrCreate({
@@ -50,7 +54,7 @@ let postBookAppointment = (data) => {
                             statusId: 'S1',
                             staffId: data.staffId,
                             patientID: user[0].id,
-                            // date: data.date,
+                            date: data.date,
                             timeType: data.timeType,
                             token: token
                         }
